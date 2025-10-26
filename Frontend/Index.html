@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Live Logger</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Włącza tryb dark jeśli system użytkownika ma ustawiony dark mode
+      if (
+        localStorage.theme === "dark" ||
+        (!("theme" in localStorage) &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches)
+      ) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+
+      // Funkcja przełączająca tryb jasny/ciemny
+      function toggleTheme() {
+        const html = document.documentElement;
+        if (html.classList.contains("dark")) {
+          html.classList.remove("dark");
+          localStorage.theme = "light";
+        } else {
+          html.classList.add("dark");
+          localStorage.theme = "dark";
+        }
+      }
+    </script>
+  </head>
+
+  <body
+    class="bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col items-center font-sans text-gray-900 dark:text-gray-100 transition-colors duration-300"
+  >
+    <!-- Header -->
+    <header
+      class="w-full bg-indigo-600 dark:bg-indigo-800 text-white py-6 shadow-lg"
+    >
+      <div class="container mx-auto text-center relative">
+        <h1 class="text-3xl font-bold">Live Logger</h1>
+        <p class="text-indigo-200 dark:text-indigo-300 mt-1">
+          Real-time Logging App
+        </p>
+        <!-- Przycisk Dark Mode -->
+        <button
+          onclick="toggleTheme()"
+          class="absolute top-0 right-4 bg-indigo-500 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-sm px-3 py-1 rounded-full mt-2 transition-colors"
+        >
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main
+      class="flex flex-col md:flex-row gap-6 w-full max-w-5xl mt-10 px-6 md:px-0"
+    >
+      <!-- Send Data -->
+      <div
+        class="flex-1 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 transition-colors"
+      >
+        <h2 class="text-2xl font-semibold mb-4">Send Data</h2>
+        <div class="flex flex-col space-y-4">
+          <input
+            type="text"
+            id="name"
+            placeholder="Name"
+            class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <textarea
+            id="message"
+            placeholder="Message"
+            rows="4"
+            class="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+          ></textarea>
+          <button
+            id="send-button"
+            class="bg-indigo-600 dark:bg-indigo-700 text-white rounded-lg py-2 font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition duration-200"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+
+      <!-- Receive Data -->
+      <div
+        class="flex-1 bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 border border-gray-100 dark:border-gray-700 transition-colors"
+      >
+        <h2 class="text-2xl font-semibold mb-4">Receive Data</h2>
+        <textarea
+          id="receive-data"
+          readonly
+          rows="8"
+          class="w-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-100 rounded-lg px-4 py-2 resize-none focus:outline-none"
+        ></textarea>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer
+      class="mt-10 mb-6 text-gray-500 dark:text-gray-400 text-sm transition-colors"
+    >
+      © 2025 Live Logger — Built with ❤️ and Tailwind CSS
+    </footer>
+  </body>
+</html>
