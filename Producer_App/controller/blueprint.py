@@ -1,21 +1,20 @@
-from flask import Blueprint, request, jsonify
-from kafka import KafkaProducer
-from model.logs import Logs
+from flask import Flask, request, jsonify
+import json
 
-controller = Blueprint('controller', __name__)
+bp = Blueprint("producer", __name__)
 
-producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
-)
+@bp.route("/")
+def index():
+    return "Flask App run check sending data to Kafka", 200
 
-@controller.route('/logs', methods=['POST'])
-def send_logs():
-    data = request.get_json()
-    if not data or 'name' not in data or 'message' not in data:
-        return jsonify({'error': 'Invalid data'}), 400
-    
-    producer.send('logs', data)
-    producer.flush()
-    
-    return jsonify(log.send_log())
+@bp.route("/send", methods=["POST"])
+def send_messege():
+    try:
+        data = request.get_json()
+        topic = data.get("topic", "default_topic")
+        messege = data.get("message", {})
+
+        sent_to_kafka(topic, messege)
+        reutrn jsonify({"status": "sent", "topic": topic}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
